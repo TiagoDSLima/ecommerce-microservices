@@ -7,6 +7,8 @@ import com.br.ecommerce.auth.enums.Role;
 import com.br.ecommerce.auth.exception.exceptions.CredenciaisInvalidasException;
 import com.br.ecommerce.auth.exception.exceptions.EmailJaEmUsoException;
 import com.br.ecommerce.auth.model.Usuario;
+import com.br.ecommerce.auth.publisher.UsuarioPublisher;
+import com.br.ecommerce.auth.publisher.representation.ParticipanteRepresentation;
 import com.br.ecommerce.auth.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +21,7 @@ public class AuthService {
     private final UsuarioRepository repository;
     private final PasswordEncoder encoder;
     private final JwtService jwtService;
+    private final UsuarioPublisher usuarioPublisher;
 
     public LoginResponse login(LoginRequest request) {
 
@@ -51,6 +54,7 @@ public class AuthService {
                 .build();
 
         repository.save(user);
+        usuarioPublisher.publicar(new ParticipanteRepresentation(request.nome(), request.cpf(), request.dataNascimento()));
 
         String token = jwtService.generateToken(user.getEmail(), user.getRole().name());
 

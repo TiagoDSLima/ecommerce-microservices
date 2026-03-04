@@ -18,3 +18,5 @@ spring:
       hibernate:
         format_sql: true
 
+auth:
+  secret-key: ${JWT_SECRET:dev-secret-key-12345678901234567890}

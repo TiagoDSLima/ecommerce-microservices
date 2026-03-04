@@ -1,4 +1,8 @@
 package com.br.ecommerce.auth.dto;
 
-public class LoginResponse {
+public record LoginResponse(
+        Long id,
+        String email,
+        String token
+) {
 }

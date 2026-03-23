@@ -23,3 +23,28 @@ CREATE TABLE participante(
 );
 
 ------------------------------
+
+
+-------- PRODUTO --------
+
+CREATE TABLE produto (
+    id SERIAL NOT NULL PRIMARY KEY,
+    descricao VARCHAR(255),
+    valor_unitario NUMERIC(10,2),
+    quantidade INTEGER
+);
+
+CREATE TABLE produto_variacao (
+   id SERIAL NOT NULL PRIMARY KEY,
+   tamanho VARCHAR(50),
+   cor VARCHAR(50),
+   quantidade INTEGER,
+   produto_id BIGINT,
+
+   CONSTRAINT fk_produto
+       FOREIGN KEY (produto_id)
+            REFERENCES produto (id)
+            ON DELETE CASCADE
+);
+
+--------------------------

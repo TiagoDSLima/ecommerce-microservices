@@ -1,0 +1,26 @@
+package com.br.ecommerce.produto.mapper;
+
+import com.br.ecommerce.produto.dto.ProdutoDto;
+import com.br.ecommerce.produto.model.Produto;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+
+@Mapper(componentModel = "spring", uses = ProdutoVariacaoMapper.class)
+public abstract class ProdutoMapper {
+
+    @Mapping(source = "produtoVariacoes", target = "variacoes")
+    public abstract ProdutoDto map(Produto entity);
+
+    @Mapping(source = "variacoes", target = "produtoVariacoes")
+    public abstract Produto map(ProdutoDto dto);
+
+    @AfterMapping
+    protected void linkVariacoes(@MappingTarget Produto produto) {
+        if (produto.getVariacoes() != null) {
+            produto.getVariacoes()
+                    .forEach(v -> v.setProduto(produto));
+        }
+    }
+}

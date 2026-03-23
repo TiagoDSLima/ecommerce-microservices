@@ -17,7 +17,7 @@ public class ParticipanteCriadoSubscriber {
     private final ObjectMapper objectMapper;
     private final ParticipanteService participanteService;
 
-    @KafkaListener(groupId = "${ecommerce.config.kafka.group-id}", topics = "${erpmicroservices.config.kafka.topics.pedidos-pagos}")
+    @KafkaListener(groupId = "${ecommerce.config.kafka.group-id}", topics = "${ecommerce.config.kafka.topics.usuarios-criados}")
     public void listen(String json){
         try{
             log.info("Recebendo participante {}", json);

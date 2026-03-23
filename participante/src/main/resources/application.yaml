@@ -1,3 +1,26 @@
 spring:
   application:
     name: participante
+  datasource:
+    url: jdbc:postgresql://localhost:5556/ecommerceparticipante
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+ecommerce:
+  config:
+    kafka:
+      server-url: 'http://localhost:29092'
+      group-id: 'ecommerce-participante'
+      topics:
+        usuarios-criados: 'usuarios-criados'
+
+

@@ -1,0 +1,25 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: produto
+  datasource:
+    url: jdbc:postgresql://localhost:5556/ecommerceproduto
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+minio:
+  url: 'http://localhost:9100'
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket-name: ecommerce.produtos

@@ -18,19 +18,15 @@ public class BucketService {
     private final MinioClient minioClient;
     private final MinioProps minioProps;
 
-    public void upload(BucketFile bucketFile) {
-        try{
-            var object = PutObjectArgs
-                    .builder()
-                    .bucket(minioProps.getBucketName())
-                    .object(bucketFile.name())
-                    .stream(bucketFile.is(), bucketFile.size(), -1)
-                    .contentType(bucketFile.type().toString())
-                    .build();
-            minioClient.putObject(object);
-        } catch (Exception e){
-            throw new RuntimeException(e);
-        }
+    public void upload(BucketFile bucketFile) throws Exception{
+        var object = PutObjectArgs
+                .builder()
+                .bucket(minioProps.getBucketName())
+                .object(bucketFile.name())
+                .stream(bucketFile.is(), bucketFile.size(), -1)
+                .contentType(bucketFile.type().toString())
+                .build();
+        minioClient.putObject(object);
     }
 
     public String getUrl(Long idProduto){

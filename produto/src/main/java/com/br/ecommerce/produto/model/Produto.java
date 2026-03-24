@@ -23,4 +23,6 @@ public class Produto {
     private Integer quantidade;
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProdutoVariacao> variacoes;
+    @Transient
+    private String urlImagem;
 }

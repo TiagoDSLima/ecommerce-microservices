@@ -41,7 +41,7 @@ public class BucketService {
 
             return minioClient.getPresignedObjectUrl(obejct);
         } catch(Exception e){
-            throw new RuntimeException(e);
+            return "";
         }
     }
 

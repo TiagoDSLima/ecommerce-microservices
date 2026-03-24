@@ -1,0 +1,8 @@
+package com.br.ecommerce.loja.dto;
+
+import org.springframework.http.MediaType;
+
+import java.io.InputStream;
+
+public record BucketFile(String name, InputStream is, MediaType type, long size) {
+}

@@ -5,9 +5,13 @@ import com.br.ecommerce.produto.dto.ProdutoRequest;
 import com.br.ecommerce.produto.dto.ProdutoResponse;
 import com.br.ecommerce.produto.exception.exceptions.FalhaAoSalvarImagemException;
 import com.br.ecommerce.produto.exception.exceptions.ProdutoNaoEcontradoException;
+import com.br.ecommerce.produto.exception.exceptions.ProdutoUtilizadoException;
 import com.br.ecommerce.produto.mapper.ProdutoMapper;
+import com.br.ecommerce.produto.mapper.ProdutoVariacaoMapper;
 import com.br.ecommerce.produto.model.Produto;
+import com.br.ecommerce.produto.model.ProdutoVariacao;
 import com.br.ecommerce.produto.repository.ProdutoRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,7 @@ public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
     private final ProdutoMapper produtoMapper;
+    private final ProdutoVariacaoMapper produtoVariacaoMapper;
     private final BucketService bucketService;
 
     public ProdutoResponse criaProduto(ProdutoRequest produtoRequest){
@@ -55,5 +60,56 @@ public class ProdutoService {
         produto.setUrlImagem(bucketService.getUrl(produto.getId()));
 
         return produtoMapper.map(produto);
+    }
+
+    @Transactional
+    public ProdutoResponse alteraProduto(ProdutoRequest produtoRequest){
+        Produto produto = produtoRepository.findById(produtoRequest.id())
+                .orElseThrow(() -> new ProdutoNaoEcontradoException("id", String.format("Produto não encontrado com o código informado! Código: %s", produtoRequest.id().toString())));
+
+        if(produtoRequest.imagem() != null){
+            try{
+                //criar função para apagar imagem no bucket
+                var file = new BucketFile(bucketService.retornaNomeProduto(produto.getId()), produtoRequest.imagem().getInputStream(), MediaType.APPLICATION_PDF, produtoRequest.imagem().getSize());
+                produto.setUrlImagem(bucketService.getUrl(produto.getId()));
+                bucketService.upload(file);
+            } catch (Exception e){
+                throw new FalhaAoSalvarImagemException("imagem", "Falha ao cadastrar produto: imagem inválida!");
+            }
+        }
+        if(produtoRequest.descricao() != null) {
+            produto.setDescricao(produtoRequest.descricao());
+        }
+        if(produtoRequest.quantidade() != null) {
+            produto.setQuantidade(produtoRequest.quantidade());
+        }
+        if(produtoRequest.valorUnitario() != null) {
+            produto.setValorUnitario(produtoRequest.valorUnitario());
+        }
+        if(produtoRequest.variacoes() != null) {
+            produto.getVariacoes().clear();
+            List<ProdutoVariacao> variacoes = produtoRequest.variacoes()
+                    .stream().map(produtoVariacaoMapper::map).toList();
+            variacoes.forEach(variacao -> variacao.setProduto(produto));
+            produto.setVariacoes(variacoes);
+        }
+
+        return produtoMapper.map(produto);
+    }
+
+    public void deletaProduto(Long id){
+        if(!verificaSeProdutoExiste(id)) throw new ProdutoNaoEcontradoException("id", String.format("Produto do código %s não encontrado!", id.toString()));
+        if(verificaProdutoUtilizado(id)) throw new ProdutoUtilizadoException("id", String.format("Produto %s já está utilizado, não pode ser excluso!", id.toString()));
+        produtoRepository.deleteById(id);
+    }
+
+    private boolean verificaProdutoUtilizado(Long id){
+        boolean produtoUtilizado = false;
+        //Enviar para o serviço de pedidos uma requisição procurando se o produto está sendo utilizando
+        return produtoUtilizado;
+    }
+
+    private boolean verificaSeProdutoExiste(Long id){
+        return produtoRepository.existsById(id);
     }
 }

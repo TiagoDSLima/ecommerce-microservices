@@ -1,6 +1,7 @@
 package com.br.ecommerce.produto.mapper;
 
-import com.br.ecommerce.produto.dto.ProdutoDto;
+import com.br.ecommerce.produto.dto.ProdutoRequest;
+import com.br.ecommerce.produto.dto.ProdutoResponse;
 import com.br.ecommerce.produto.model.Produto;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -11,10 +12,10 @@ import org.mapstruct.MappingTarget;
 public abstract class ProdutoMapper {
 
     @Mapping(source = "produtoVariacoes", target = "variacoes")
-    public abstract ProdutoDto map(Produto entity);
+    public abstract ProdutoResponse map(Produto entity);
 
     @Mapping(source = "variacoes", target = "produtoVariacoes")
-    public abstract Produto map(ProdutoDto dto);
+    public abstract Produto map(ProdutoRequest dto);
 
     @AfterMapping
     protected void linkVariacoes(@MappingTarget Produto produto) {

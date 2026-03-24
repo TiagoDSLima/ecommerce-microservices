@@ -1,0 +1,25 @@
+package com.br.ecommerce.produto.exception;
+
+import com.br.ecommerce.produto.dto.ErrorResponse;
+import com.br.ecommerce.produto.exception.exceptions.ProdutoNaoEcontradoException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.time.LocalDateTime;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ProdutoNaoEcontradoException.class)
+    public ResponseEntity<ErrorResponse> handleProdutoNaoEncontradoException(ProdutoNaoEcontradoException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(
+                        ex.getCampo(),
+                        ex.getMensagem(),
+                        LocalDateTime.now()
+                ));
+    }
+}

@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Produto {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descricao;
     private BigDecimal valorUnitario;

@@ -3,6 +3,8 @@ package com.br.ecommerce.produto.service;
 import com.br.ecommerce.produto.dto.BucketFile;
 import com.br.ecommerce.produto.dto.ProdutoRequest;
 import com.br.ecommerce.produto.dto.ProdutoResponse;
+import com.br.ecommerce.produto.dto.ProdutoVariacaoDto;
+import com.br.ecommerce.produto.exception.exceptions.EstoqueInvalidoException;
 import com.br.ecommerce.produto.exception.exceptions.FalhaAoSalvarImagemException;
 import com.br.ecommerce.produto.exception.exceptions.ProdutoNaoEcontradoException;
 import com.br.ecommerce.produto.exception.exceptions.ProdutoUtilizadoException;
@@ -30,6 +32,7 @@ public class ProdutoService {
     private final BucketService bucketService;
 
     public ProdutoResponse criaProduto(ProdutoRequest produtoRequest){
+        verificaEstoqueProdutoXVariacao(produtoRequest);
         Produto produto = produtoRepository.save(produtoMapper.map(produtoRequest));
         try{
             var file = new BucketFile(bucketService.retornaNomeProduto(produto.getId()), produtoRequest.imagem().getInputStream(), produtoRequest.imagem().getContentType(), produtoRequest.imagem().getSize());
@@ -65,6 +68,7 @@ public class ProdutoService {
 
     @Transactional
     public ProdutoResponse alteraProduto(ProdutoRequest produtoRequest){
+        verificaEstoqueProdutoXVariacao(produtoRequest);
         Produto produto = produtoRepository.findById(produtoRequest.id())
                 .orElseThrow(() -> new ProdutoNaoEcontradoException("id", String.format("Produto não encontrado com o código informado! Código: %s", produtoRequest.id().toString())));
 
@@ -121,5 +125,15 @@ public class ProdutoService {
         }
 
         return false;
+    }
+
+    private void verificaEstoqueProdutoXVariacao(ProdutoRequest produtoRequest){
+        Integer qtdTotalVariacao = produtoRequest.variacoes().stream()
+                .mapToInt(ProdutoVariacaoDto::quantidade)
+                .sum();
+
+        if(produtoRequest.quantidade() < qtdTotalVariacao){
+            throw new EstoqueInvalidoException("quantidade", "Quantidade informada para as variações é maior que o estoque total do produto!");
+        }
     }
 }

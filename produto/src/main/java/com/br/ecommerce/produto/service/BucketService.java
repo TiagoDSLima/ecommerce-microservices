@@ -5,6 +5,7 @@ import com.br.ecommerce.produto.dto.BucketFile;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.RemoveObjectArgs;
 import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class BucketService {
                 .bucket(minioProps.getBucketName())
                 .object(bucketFile.name())
                 .stream(bucketFile.is(), bucketFile.size(), -1)
-                .contentType(bucketFile.type().toString())
+                .contentType(bucketFile.type())
                 .build();
         minioClient.putObject(object);
     }
@@ -45,7 +46,19 @@ public class BucketService {
         }
     }
 
+    public void delete(Long idProduto) {
+        try {
+            var args = RemoveObjectArgs
+                    .builder()
+                    .bucket(minioProps.getBucketName())
+                    .object(retornaNomeProduto(idProduto))
+                    .build();
+
+            minioClient.removeObject(args);
+        } catch (Exception ignored) {}
+    }
+
     public String retornaNomeProduto(Long idProduto) {
-        return String.format("produto-%d.pdf", idProduto);
+        return String.format("produto-%d", idProduto);
     }
 }

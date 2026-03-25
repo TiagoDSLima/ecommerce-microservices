@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class ProdutoService {
     public ProdutoResponse criaProduto(ProdutoRequest produtoRequest){
         Produto produto = produtoRepository.save(produtoMapper.map(produtoRequest));
         try{
-            var file = new BucketFile(bucketService.retornaNomeProduto(produto.getId()), produtoRequest.imagem().getInputStream(), MediaType.APPLICATION_PDF, produtoRequest.imagem().getSize());
+            var file = new BucketFile(bucketService.retornaNomeProduto(produto.getId()), produtoRequest.imagem().getInputStream(), produtoRequest.imagem().getContentType(), produtoRequest.imagem().getSize());
             bucketService.upload(file);
         } catch(Exception e){
             produtoRepository.delete(produto);
@@ -68,9 +69,10 @@ public class ProdutoService {
                 .orElseThrow(() -> new ProdutoNaoEcontradoException("id", String.format("Produto não encontrado com o código informado! Código: %s", produtoRequest.id().toString())));
 
         if(produtoRequest.imagem() != null){
+            if(!verificaSeArquivoEImagem(produtoRequest.imagem())) throw new FalhaAoSalvarImagemException("imagem", "Falha ao cadastrar produto: imagem inválida!");
             try{
-                //criar função para apagar imagem no bucket
-                var file = new BucketFile(bucketService.retornaNomeProduto(produto.getId()), produtoRequest.imagem().getInputStream(), MediaType.APPLICATION_PDF, produtoRequest.imagem().getSize());
+                bucketService.delete(produto.getId());
+                var file = new BucketFile(bucketService.retornaNomeProduto(produto.getId()), produtoRequest.imagem().getInputStream(), produtoRequest.imagem().getContentType(), produtoRequest.imagem().getSize());
                 produto.setUrlImagem(bucketService.getUrl(produto.getId()));
                 bucketService.upload(file);
             } catch (Exception e){
@@ -111,5 +113,13 @@ public class ProdutoService {
 
     private boolean verificaSeProdutoExiste(Long id){
         return produtoRepository.existsById(id);
+    }
+
+    private boolean verificaSeArquivoEImagem(MultipartFile arquivo){
+        if (arquivo != null && arquivo.getContentType().startsWith("image/")) {
+            return true;
+        }
+
+        return false;
     }
 }

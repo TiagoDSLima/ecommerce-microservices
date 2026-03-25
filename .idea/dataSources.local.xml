@@ -18,6 +18,7 @@
               <name qname="ecommerceauth" />
               <name qname="ecommerceloja" />
               <name qname="ecommerceparticipante" />
+              <name qname="ecommerceproduto" />
               <node kind="schema" qname="public" />
             </node>
           </node>

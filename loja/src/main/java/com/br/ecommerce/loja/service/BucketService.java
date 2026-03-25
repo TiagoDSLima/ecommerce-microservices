@@ -5,6 +5,7 @@ import com.br.ecommerce.loja.dto.BucketFile;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.RemoveObjectArgs;
 import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,12 +25,12 @@ public class BucketService {
                 .bucket(minioProps.getBucketName())
                 .object(bucketFile.name())
                 .stream(bucketFile.is(), bucketFile.size(), -1)
-                .contentType(bucketFile.type().toString())
+                .contentType(bucketFile.type())
                 .build();
         minioClient.putObject(object);
     }
 
-    public String getUrl(Long idLoja){
+    public String getUrl(String idLoja){
         try{
             var obejct = GetPresignedObjectUrlArgs
                     .builder()
@@ -45,7 +46,19 @@ public class BucketService {
         }
     }
 
-    public String retornaNomeLogo(Long idLoja) {
-        return String.format("logo-%d.pdf", idLoja);
+    public void delete(String idLoja) {
+        try {
+            var args = RemoveObjectArgs
+                    .builder()
+                    .bucket(minioProps.getBucketName())
+                    .object(retornaNomeLogo(idLoja))
+                    .build();
+
+            minioClient.removeObject(args);
+        } catch (Exception ignored) {}
+    }
+
+    public String retornaNomeLogo(String idLoja) {
+        return String.format("logo-%s", idLoja);
     }
 }

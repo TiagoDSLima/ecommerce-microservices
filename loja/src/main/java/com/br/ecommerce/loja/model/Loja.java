@@ -18,8 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class Loja {
 
     @Id
-    private Long id;
+    private String id;
     private String corPrimaria;
-    @Transient
-    private MultipartFile urlImagem;
 }

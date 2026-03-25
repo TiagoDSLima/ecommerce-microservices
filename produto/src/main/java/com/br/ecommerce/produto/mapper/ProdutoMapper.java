@@ -11,10 +11,8 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring", uses = ProdutoVariacaoMapper.class)
 public abstract class ProdutoMapper {
 
-    @Mapping(source = "produtoVariacoes", target = "variacoes")
     public abstract ProdutoResponse map(Produto entity);
 
-    @Mapping(source = "variacoes", target = "produtoVariacoes")
     public abstract Produto map(ProdutoRequest dto);
 
     @AfterMapping

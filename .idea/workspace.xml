@@ -5,15 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1996295a-31a1-4a3b-80f2-3649d564854e" name="Changes" comment="init(Gateway): criando gateway">
-      <change afterPath="$PROJECT_DIR$/produto/src/main/java/com/br/ecommerce/produto/dto/ProdutoDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/produto/src/main/java/com/br/ecommerce/produto/dto/ProdutoVariacaoDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/produto/src/main/java/com/br/ecommerce/produto/mapper/ProdutoMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/produto/src/main/java/com/br/ecommerce/produto/mapper/ProdutoVariacaoMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/produto/src/main/java/com/br/ecommerce/produto/model/Produto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/produto/src/main/java/com/br/ecommerce/produto/model/ProdutoVariacao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/produto/src/main/java/com/br/ecommerce/produto/repository/ProdutoRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/produto/src/main/java/com/br/ecommerce/produto/service/ProdutoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/produto/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/produto/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/loja/src/main/java/com/br/ecommerce/loja/controller/LojaController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/loja/src/main/java/com/br/ecommerce/loja/dto/ErrorResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/loja/src/main/java/com/br/ecommerce/loja/dto/LojaRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/loja/src/main/java/com/br/ecommerce/loja/dto/LojaResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/loja/src/main/java/com/br/ecommerce/loja/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/loja/src/main/java/com/br/ecommerce/loja/exception/exception/LogoInvalidaException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/loja/src/main/java/com/br/ecommerce/loja/service/LojaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/067c7020-d3b5-4f51-b04f-bebc234903ef.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/067c7020-d3b5-4f51-b04f-bebc234903ef.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/067c7020-d3b5-4f51-b04f-bebc234903ef/storage_v2/_src_/database/ecommerceauth.6HMAAA/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/067c7020-d3b5-4f51-b04f-bebc234903ef/storage_v2/_src_/database/ecommerceauth.6HMAAA/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/067c7020-d3b5-4f51-b04f-bebc234903ef/storage_v2/_src_/database/ecommerceparticipante.0k34wQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/067c7020-d3b5-4f51-b04f-bebc234903ef/storage_v2/_src_/database/ecommerceparticipante.0k34wQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/067c7020-d3b5-4f51-b04f-bebc234903ef/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/067c7020-d3b5-4f51-b04f-bebc234903ef/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loja/src/main/java/com/br/ecommerce/loja/dto/BucketFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/loja/src/main/java/com/br/ecommerce/loja/dto/BucketFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loja/src/main/java/com/br/ecommerce/loja/dto/repository/LojaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/loja/src/main/java/com/br/ecommerce/loja/repository/LojaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loja/src/main/java/com/br/ecommerce/loja/model/Loja.java" beforeDir="false" afterPath="$PROJECT_DIR$/loja/src/main/java/com/br/ecommerce/loja/model/Loja.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loja/src/main/java/com/br/ecommerce/loja/service/BucketService.java" beforeDir="false" afterPath="$PROJECT_DIR$/loja/src/main/java/com/br/ecommerce/loja/service/BucketService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicos/database/data/base/1/pg_internal.init" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicos/database/data/base/16386/pg_internal.init" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/base/16386/pg_internal.init" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicos/database/data/base/16398/pg_internal.init" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/base/16398/pg_internal.init" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicos/database/data/base/5/pg_internal.init" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/base/5/pg_internal.init" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicos/database/data/global/1262" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/global/1262" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicos/database/data/global/2671" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/global/2671" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicos/database/data/global/2672" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/global/2672" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicos/database/data/global/pg_control" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/global/pg_control" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicos/database/data/global/pg_internal.init" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/global/pg_internal.init" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicos/database/data/pg_wal/000000010000000000000001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicos/database/data/pg_wal/000000010000000000000002" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/pg_wal/000000010000000000000002" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicos/database/data/pg_xact/0000" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/pg_xact/0000" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicos/database/data/postmaster.pid" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/postmaster.pid" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/servicos/database/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/schema.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -48,35 +67,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHELLCHECK.PATH": "I do mind",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/TIAGO",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Global Libraries",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "show.migrate.to.gradle.popup": "false",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SHELLCHECK.PATH&quot;: &quot;I do mind&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/TIAGO&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="ecommerce-microservices" />

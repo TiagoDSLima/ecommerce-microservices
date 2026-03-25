@@ -16,6 +16,7 @@
             </node>
             <node kind="database">
               <name qname="ecommerceauth" />
+              <name qname="ecommerceloja" />
               <name qname="ecommerceparticipante" />
               <node kind="schema" qname="public" />
             </node>

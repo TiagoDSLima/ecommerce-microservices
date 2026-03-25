@@ -27,6 +27,8 @@ CREATE TABLE participante(
 
 -------- PRODUTO --------
 
+CREATE DATABASE ecommerceproduto;
+
 CREATE TABLE produto (
     id SERIAL NOT NULL PRIMARY KEY,
     descricao VARCHAR(255),
@@ -48,3 +50,15 @@ CREATE TABLE produto_variacao (
 );
 
 --------------------------
+
+
+-------- LOJA --------
+
+CREATE DATABASE ecommerceloja;
+
+CREATE TABLE loja(
+    id VARCHAR(15) NOT NULL PRIMARY KEY,
+    cor_primaria VARCHAR(20) NOT NULL
+);
+
+----------------------

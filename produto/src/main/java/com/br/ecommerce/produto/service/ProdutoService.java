@@ -111,6 +111,15 @@ public class ProdutoService {
         produtoRepository.deleteById(id);
     }
 
+    public List<ProdutoResponse> buscaTodosComEstoque(){
+        List<Produto> produtosComEstoquePositivo = produtoRepository.findProdutosComEstoqueDisponivel();
+
+        return produtosComEstoquePositivo
+                .stream()
+                .map(produtoMapper::map)
+                .toList();
+    }
+
     private boolean verificaProdutoUtilizado(Long id){
         boolean produtoUtilizado = false;
         //Enviar para o serviço de pedidos uma requisição procurando se o produto está sendo utilizando

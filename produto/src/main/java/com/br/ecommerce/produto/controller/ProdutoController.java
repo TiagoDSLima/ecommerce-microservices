@@ -35,6 +35,11 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.OK).body(produtoService.buscaProduto(idProduto));
     }
 
+    @GetMapping(value = "/buscaTodosComEstoque")
+    public ResponseEntity<List<ProdutoResponse>> buscaTodosComEstoque(){
+        return ResponseEntity.status(HttpStatus.OK).body(produtoService.buscaTodosComEstoque());
+    }
+
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ProdutoResponse> alteraProduto(@ModelAttribute ProdutoRequest produtoRequest){
         return ResponseEntity.status(HttpStatus.OK).body(produtoService.alteraProduto(produtoRequest));

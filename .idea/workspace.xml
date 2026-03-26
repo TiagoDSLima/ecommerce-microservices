@@ -5,17 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1996295a-31a1-4a3b-80f2-3649d564854e" name="Changes" comment="init(Gateway): criando gateway">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/produto/src/main/java/com/br/ecommerce/produto/dto/ProdutoVariacaoDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/produto/src/main/java/com/br/ecommerce/produto/dto/ProdutoVariacaoDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/produto/src/main/java/com/br/ecommerce/produto/service/ProdutoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/produto/src/main/java/com/br/ecommerce/produto/service/ProdutoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servicos/database/data/base/16386/pg_internal.init" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/servicos/database/data/base/16398/pg_internal.init" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/servicos/database/data/base/5/pg_internal.init" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/servicos/database/data/global/pg_control" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/global/pg_control" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servicos/database/data/global/pg_internal.init" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/global/pg_internal.init" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/servicos/database/data/pg_wal/000000010000000000000002" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/pg_wal/000000010000000000000002" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/servicos/database/data/pg_xact/0000" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/pg_xact/0000" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servicos/database/data/postmaster.pid" beforeDir="false" afterPath="$PROJECT_DIR$/servicos/database/data/postmaster.pid" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

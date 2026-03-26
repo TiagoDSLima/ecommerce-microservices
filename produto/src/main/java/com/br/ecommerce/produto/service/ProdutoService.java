@@ -96,8 +96,10 @@ public class ProdutoService {
             produto.getVariacoes().clear();
             List<ProdutoVariacao> variacoes = produtoRequest.variacoes()
                     .stream().map(produtoVariacaoMapper::map).toList();
-            variacoes.forEach(variacao -> variacao.setProduto(produto));
-            produto.setVariacoes(variacoes);
+            variacoes.forEach(variacao -> {
+                variacao.setProduto(produto);
+                produto.getVariacoes().add(variacao);
+            });
         }
 
         return produtoMapper.map(produto);

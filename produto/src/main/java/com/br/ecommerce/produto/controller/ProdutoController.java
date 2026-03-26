@@ -5,7 +5,6 @@ import com.br.ecommerce.produto.dto.ProdutoRequest;
 import com.br.ecommerce.produto.dto.ProdutoResponse;
 import com.br.ecommerce.produto.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
-import okhttp3.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

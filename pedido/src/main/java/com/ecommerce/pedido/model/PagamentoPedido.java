@@ -1,5 +1,6 @@
 package com.ecommerce.pedido.model;
 
+import com.ecommerce.pedido.enums.BandeiraCartao;
 import com.ecommerce.pedido.enums.StatusPagamento;
 import com.ecommerce.pedido.enums.TipoPagamento;
 import jakarta.persistence.*;
@@ -22,6 +23,7 @@ public class PagamentoPedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private StatusPagamento statusPagamento;
+    private BandeiraCartao bandeiraCartao;
     private TipoPagamento tipoPagamento;
     private BigDecimal valorPagamento;
     @ManyToOne

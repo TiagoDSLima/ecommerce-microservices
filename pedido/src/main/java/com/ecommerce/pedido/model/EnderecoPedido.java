@@ -16,6 +16,7 @@ public class EnderecoPedido {
     private Long id;
     private String cep;
     private String rua;
+    private String bairro;
     private String numero;
     private String cidade;
     private String uf;

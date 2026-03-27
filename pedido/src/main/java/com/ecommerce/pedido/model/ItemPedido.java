@@ -22,7 +22,7 @@ public class ItemPedido {
     private String descricao;
     private BigDecimal valorUnitario;
     private Integer quantidade;
-    private BigDecimal valorTotalProduto;
+    private BigDecimal valorTotalItem;
     private Long idProduto;
     @ManyToOne
     @JoinColumn(name = "pedido_id")

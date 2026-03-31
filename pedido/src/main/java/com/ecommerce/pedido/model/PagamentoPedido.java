@@ -26,7 +26,7 @@ public class PagamentoPedido {
     private BandeiraCartao bandeiraCartao;
     private TipoPagamento tipoPagamento;
     private BigDecimal valorPagamento;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
 

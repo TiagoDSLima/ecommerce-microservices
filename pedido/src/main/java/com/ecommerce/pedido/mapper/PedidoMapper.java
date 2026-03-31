@@ -22,11 +22,11 @@ public interface PedidoMapper {
     @Mapping(target = "itensPedido", source = "itensPedido")
     @Mapping(target = "enderecoPedido", source = "endereco")
     @Mapping(target = "pagamentoPedido", source = "pagamento")
-    Pedido toEntity(PedidoRequest request);
+    Pedido map(PedidoRequest request);
 
     @Mapping(target = "nomeCliente", source = "nomeCliente")
     @Mapping(target = "cpf", source = "cpf")
-    PedidoResponse toResponse(Pedido pedido, String nomeCliente, String cpf);
+    PedidoResponse map(Pedido pedido, String nomeCliente, String cpf);
 
     @AfterMapping
     default void afterMapping(@MappingTarget Pedido pedido) {

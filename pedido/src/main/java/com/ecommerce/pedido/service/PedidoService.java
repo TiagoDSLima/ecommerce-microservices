@@ -6,6 +6,7 @@ import com.ecommerce.pedido.dto.PedidoResponse;
 import com.ecommerce.pedido.mapper.PedidoMapper;
 import com.ecommerce.pedido.model.Pedido;
 import com.ecommerce.pedido.repository.PedidoRepository;
+import com.mercadopago.resources.payment.Payment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

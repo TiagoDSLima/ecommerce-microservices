@@ -14,6 +14,6 @@ public record PagamentoPedidoRequest(
         String emailPagador,
         String primeiroNomePagador,
         String segundoNomePagador,
-        String cpfPagador
+        String cpfCnpjPagador
 ) {
 }

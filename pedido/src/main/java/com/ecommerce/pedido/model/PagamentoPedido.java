@@ -26,6 +26,8 @@ public class PagamentoPedido {
     private BandeiraCartao bandeiraCartao;
     private TipoPagamento tipoPagamento;
     private BigDecimal valorPagamento;
+    private Integer parcelas;
+    private Long mercadoPagoId;
     @OneToOne
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;

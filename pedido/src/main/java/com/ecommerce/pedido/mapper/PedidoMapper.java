@@ -1,7 +1,7 @@
 package com.ecommerce.pedido.mapper;
 
+import com.ecommerce.pedido.dto.PedidoCriadoResponse;
 import com.ecommerce.pedido.dto.PedidoRequest;
-import com.ecommerce.pedido.dto.PedidoResponse;
 import com.ecommerce.pedido.model.*;
 import org.mapstruct.*;
 
@@ -23,10 +23,6 @@ public interface PedidoMapper {
     @Mapping(target = "enderecoPedido", source = "endereco")
     @Mapping(target = "pagamentoPedido", source = "pagamento")
     Pedido map(PedidoRequest request);
-
-    @Mapping(target = "nomeCliente", source = "nomeCliente")
-    @Mapping(target = "cpf", source = "cpf")
-    PedidoResponse map(Pedido pedido, String nomeCliente, String cpf);
 
     @AfterMapping
     default void afterMapping(@MappingTarget Pedido pedido) {

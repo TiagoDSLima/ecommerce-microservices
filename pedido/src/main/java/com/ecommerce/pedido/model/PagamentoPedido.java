@@ -22,8 +22,12 @@ public class PagamentoPedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Enumerated(EnumType.STRING)
     private StatusPagamento statusPagamento;
+    private String observacaoStatus;
+    @Enumerated(EnumType.STRING)
     private BandeiraCartao bandeiraCartao;
+    @Enumerated(EnumType.STRING)
     private TipoPagamento tipoPagamento;
     private BigDecimal valorPagamento;
     private Integer parcelas;

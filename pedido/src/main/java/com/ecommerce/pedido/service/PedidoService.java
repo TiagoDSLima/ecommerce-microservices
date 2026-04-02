@@ -1,12 +1,12 @@
 package com.ecommerce.pedido.service;
 
 import com.ecommerce.pedido.dto.DadosPagamentoDto;
+import com.ecommerce.pedido.dto.PagamentoResponse;
+import com.ecommerce.pedido.dto.PedidoCriadoResponse;
 import com.ecommerce.pedido.dto.PedidoRequest;
-import com.ecommerce.pedido.dto.PedidoResponse;
 import com.ecommerce.pedido.mapper.PedidoMapper;
 import com.ecommerce.pedido.model.Pedido;
 import com.ecommerce.pedido.repository.PedidoRepository;
-import com.mercadopago.resources.payment.Payment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ public class PedidoService {
     private final PedidoRepository pedidoRepository;
     private final PagamentoService pagamentoService;
 
-    public PedidoResponse criaPedido(PedidoRequest pedidoRequest){
+    public PedidoCriadoResponse criaPedido(PedidoRequest pedidoRequest){
         Pedido pedido = pedidoMapper.map(pedidoRequest);
         pedidoRepository.save(pedido);
 
@@ -35,8 +35,10 @@ public class PedidoService {
                 pedidoRequest.pagamento().segundoNomePagador()
         );
 
-        pagamentoService.geraPagamento(dadosPagamento);
+        PagamentoResponse pagamentoResponse = pagamentoService.geraPagamento(dadosPagamento);
 
+        return new PedidoCriadoResponse(pedido.getId(), pagamentoResponse.valorPagamento(), pagamentoResponse.statusPagamento(),
+                pagamentoResponse.qrCodePix(), pagamentoResponse.qrCodeBase64Pix());
     }
 
 }

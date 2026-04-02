@@ -1,9 +1,6 @@
 package com.ecommerce.pedido.service;
 
-import com.ecommerce.pedido.dto.DadosPagamentoDto;
-import com.ecommerce.pedido.dto.PagamentoResponse;
-import com.ecommerce.pedido.dto.PedidoCriadoResponse;
-import com.ecommerce.pedido.dto.PedidoRequest;
+import com.ecommerce.pedido.dto.*;
 import com.ecommerce.pedido.mapper.PedidoMapper;
 import com.ecommerce.pedido.model.Pedido;
 import com.ecommerce.pedido.repository.PedidoRepository;
@@ -40,5 +37,4 @@ public class PedidoService {
         return new PedidoCriadoResponse(pedido.getId(), pagamentoResponse.valorPagamento(), pagamentoResponse.statusPagamento(),
                 pagamentoResponse.qrCodePix(), pagamentoResponse.qrCodeBase64Pix());
     }
-
 }

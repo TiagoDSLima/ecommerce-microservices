@@ -24,6 +24,7 @@ public class ItemPedido {
     private Integer quantidade;
     private BigDecimal valorTotalItem;
     private Long idProduto;
+    private Long idProdutoVariacao;
     @ManyToOne
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;

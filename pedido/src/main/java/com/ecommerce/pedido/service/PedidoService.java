@@ -1,6 +1,7 @@
 package com.ecommerce.pedido.service;
 
 import com.ecommerce.pedido.dto.*;
+import com.ecommerce.pedido.enums.StatusPagamento;
 import com.ecommerce.pedido.mapper.PedidoMapper;
 import com.ecommerce.pedido.model.ItemPedido;
 import com.ecommerce.pedido.model.Pedido;
@@ -40,7 +41,10 @@ public class PedidoService {
         );
 
         PagamentoResponse pagamentoResponse = pagamentoService.geraPagamento(dadosPagamento);
-        publicaProdutosVendidos(pedidoRequest.itensPedido());
+
+        if(StatusPagamento.APROVADO.equals(pagamentoResponse.statusPagamento())) {
+            publicaProdutosVendidos(pedidoRequest.itensPedido());
+        }
 
         return new PedidoCriadoResponse(pedido.getId(), pagamentoResponse.valorPagamento(), pagamentoResponse.statusPagamento(),
                 pagamentoResponse.qrCodePix(), pagamentoResponse.qrCodeBase64Pix());

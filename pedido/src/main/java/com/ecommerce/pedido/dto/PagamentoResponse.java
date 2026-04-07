@@ -3,7 +3,6 @@ package com.ecommerce.pedido.dto;
 import com.ecommerce.pedido.enums.BandeiraCartao;
 import com.ecommerce.pedido.enums.StatusPagamento;
 import com.ecommerce.pedido.enums.TipoPagamento;
-import lombok.Builder;
 
 import java.math.BigDecimal;
 

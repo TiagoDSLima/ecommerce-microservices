@@ -41,6 +41,7 @@ public class PagamentoService {
                 .findByMercadoPagoId(payment.getId())
                 .orElseThrow();
 
+        //publicar produtos vendidos
         pagamento.setStatusPagamento(retornaStatus(payment.getStatus()));
         pagamento.setObservacaoStatus(payment.getStatusDetail());
         pagamentoPedidoRepository.save(pagamento);

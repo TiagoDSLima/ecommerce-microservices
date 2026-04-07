@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: pedido
+
+ecommerce:
+  config:
+    kafka:
+      server-url: 'http://localhost:29092'
+      topics:
+        produtos-vendidos: 'produtos-vendidos'

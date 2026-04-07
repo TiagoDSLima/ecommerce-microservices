@@ -2,10 +2,16 @@ package com.ecommerce.pedido.service;
 
 import com.ecommerce.pedido.dto.*;
 import com.ecommerce.pedido.mapper.PedidoMapper;
+import com.ecommerce.pedido.model.ItemPedido;
 import com.ecommerce.pedido.model.Pedido;
+import com.ecommerce.pedido.publisher.ProdutoPublisher;
+import com.ecommerce.pedido.publisher.representation.ProdutoRepresentation;
 import com.ecommerce.pedido.repository.PedidoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +20,7 @@ public class PedidoService {
     private final PedidoMapper pedidoMapper;
     private final PedidoRepository pedidoRepository;
     private final PagamentoService pagamentoService;
+    private final ProdutoPublisher produtoPublisher;
 
     public PedidoCriadoResponse criaPedido(PedidoRequest pedidoRequest){
         Pedido pedido = pedidoMapper.map(pedidoRequest);
@@ -33,8 +40,14 @@ public class PedidoService {
         );
 
         PagamentoResponse pagamentoResponse = pagamentoService.geraPagamento(dadosPagamento);
+        publicaProdutosVendidos(pedidoRequest.itensPedido());
 
         return new PedidoCriadoResponse(pedido.getId(), pagamentoResponse.valorPagamento(), pagamentoResponse.statusPagamento(),
                 pagamentoResponse.qrCodePix(), pagamentoResponse.qrCodeBase64Pix());
+    }
+
+    private void publicaProdutosVendidos(List<ItemPedidoRequest> itemPedidos){
+        List<ProdutoRepresentation> produtos = itemPedidos.stream().map(itemPedido -> new ProdutoRepresentation(itemPedido.idProduto(), itemPedido.idProdutoVariacao(), itemPedido.quantidade())).toList();
+        produtoPublisher.publicar(produtos);
     }
 }

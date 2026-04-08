@@ -32,6 +32,13 @@ public class ParticipanteService {
         return participanteMapper.map(participante);
     }
 
+    public ParticipanteResponse buscaParticipantePorId(Long id){
+        Participante participante = participanteRepository.findById(id)
+                .orElseThrow(() -> new ParticipanteNaoEcontradoExcpetion("id"));
+
+        return participanteMapper.map(participante);
+    }
+
     public List<ParticipanteResponse> buscaTodosParticipantes(){
         List<Participante> participantes = participanteRepository.findAll();
         return participantes.stream()

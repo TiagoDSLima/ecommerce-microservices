@@ -24,6 +24,12 @@ public class ParticipanteController {
         return ResponseEntity.ok(participanteResponse);
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<ParticipanteResponse> buscaParticipantePorId(@PathVariable("id") Long id){
+        ParticipanteResponse participanteResponse = participanteService.buscaParticipantePorId(id);
+        return ResponseEntity.ok(participanteResponse);
+    }
+
     @GetMapping
     public ResponseEntity<List<ParticipanteResponse>> buscaTodosParticipantes(){
         List<ParticipanteResponse> participantesResponse = participanteService.buscaTodosParticipantes();

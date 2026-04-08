@@ -18,7 +18,7 @@ public class ParticipanteController {
 
     private final ParticipanteService participanteService;
 
-    @GetMapping("{idUsuario}")
+    @GetMapping("usuario/{idUsuario}")
     public ResponseEntity<ParticipanteResponse> buscaParticipantePorIdUsuario(@PathVariable("idUsuario") Long idUsuario){
         ParticipanteResponse participanteResponse = participanteService.buscaParticipantePorIdUsuario(idUsuario);
         return ResponseEntity.ok(participanteResponse);

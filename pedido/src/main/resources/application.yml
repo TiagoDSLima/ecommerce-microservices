@@ -8,3 +8,8 @@ ecommerce:
       server-url: 'http://localhost:29092'
       topics:
         produtos-vendidos: 'produtos-vendidos'
+    clients:
+      produto:
+        url: 'http://localhost:8083/produto'
+      participante:
+        url: 'http://localhost:8082/participante'

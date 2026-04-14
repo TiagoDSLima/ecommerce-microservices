@@ -1,5 +1,6 @@
 package com.ecommerce.pedido.service;
 
+import com.ecommerce.pedido.client.ProdutoClient;
 import com.ecommerce.pedido.dto.*;
 import com.ecommerce.pedido.enums.StatusPagamento;
 import com.ecommerce.pedido.mapper.PedidoMapper;
@@ -22,8 +23,10 @@ public class PedidoService {
     private final PedidoRepository pedidoRepository;
     private final PagamentoService pagamentoService;
     private final ProdutoPublisher produtoPublisher;
+    private final ProdutoClient produtoClient;
 
     public PedidoCriadoResponse criaPedido(PedidoRequest pedidoRequest){
+        validaProdutos(pedidoRequest.itensPedido());
         Pedido pedido = pedidoMapper.map(pedidoRequest);
         pedidoRepository.save(pedido);
 
@@ -48,6 +51,27 @@ public class PedidoService {
 
         return new PedidoCriadoResponse(pedido.getId(), pagamentoResponse.valorPagamento(), pagamentoResponse.statusPagamento(),
                 pagamentoResponse.qrCodePix(), pagamentoResponse.qrCodeBase64Pix());
+    }
+
+    private void validaProdutos(List<ItemPedidoRequest> itensPedido) {
+        itensPedido.forEach(item -> {
+            try {
+                ProdutoResponse produtoResponse = produtoClient.buscar(item.idProduto());
+                if (produtoResponse == null) {
+                    throw new RuntimeException("Produto não encontrado: " + item.idProduto());
+                }
+
+                if (item.idProdutoVariacao() != null) {
+                    boolean variacaoExiste = produtoResponse.variacoes().stream()
+                            .anyMatch(v -> v.id().equals(item.idProdutoVariacao()));
+                    if (!variacaoExiste) {
+                        throw new RuntimeException("Variação do produto não encontrada: " + item.idProdutoVariacao());
+                    }
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Erro ao validar produto: " + item.idProduto() + ". " + e.getMessage());
+            }
+        });
     }
 
     private void publicaProdutosVendidos(List<ItemPedidoRequest> itemPedidos){

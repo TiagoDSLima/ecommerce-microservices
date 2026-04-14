@@ -1,4 +1,4 @@
-package com.br.ecommerce.produto.dto;
+package com.ecommerce.pedido.dto;
 
 public record ProdutoVariacaoDto(Long id, String tamanho, String cor, Integer quantidade) {
 }

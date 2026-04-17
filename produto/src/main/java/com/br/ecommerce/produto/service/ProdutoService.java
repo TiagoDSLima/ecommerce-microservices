@@ -111,6 +111,15 @@ public class ProdutoService {
         produtoRepository.deleteById(id);
     }
 
+    public List<ProdutoResponse> buscaProdutosPorIds(List<Long> ids){
+        List<Produto> produtos = produtoRepository.findAllById(ids);
+
+        return produtos
+                .stream()
+                .map(produtoMapper::map)
+                .toList();
+    }
+
     public List<ProdutoResponse> buscaTodosComEstoque(){
         List<Produto> produtosComEstoquePositivo = produtoRepository.findProdutosComEstoqueDisponivel();
 

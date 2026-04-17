@@ -3,7 +3,6 @@ package com.ecommerce.pedido.service;
 import com.ecommerce.pedido.dto.*;
 import com.ecommerce.pedido.enums.StatusPagamento;
 import com.ecommerce.pedido.mapper.PedidoMapper;
-import com.ecommerce.pedido.model.ItemPedido;
 import com.ecommerce.pedido.model.Pedido;
 import com.ecommerce.pedido.publisher.ProdutoPublisher;
 import com.ecommerce.pedido.publisher.representation.ProdutoRepresentation;
@@ -12,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class PedidoService {
@@ -22,8 +19,12 @@ public class PedidoService {
     private final PedidoRepository pedidoRepository;
     private final PagamentoService pagamentoService;
     private final ProdutoPublisher produtoPublisher;
+    private final ProdutoValidacaoService produtoValidacaoService;
+    private final ParticipanteValidacaoService participanteValidacaoService;
 
     public PedidoCriadoResponse criaPedido(PedidoRequest pedidoRequest){
+
+        validacoes(pedidoRequest);
         Pedido pedido = pedidoMapper.map(pedidoRequest);
         pedidoRepository.save(pedido);
 
@@ -53,5 +54,10 @@ public class PedidoService {
     private void publicaProdutosVendidos(List<ItemPedidoRequest> itemPedidos){
         List<ProdutoRepresentation> produtos = itemPedidos.stream().map(itemPedido -> new ProdutoRepresentation(itemPedido.idProduto(), itemPedido.idProdutoVariacao(), itemPedido.quantidade())).toList();
         produtoPublisher.publicar(produtos);
+    }
+
+    private void validacoes(PedidoRequest pedidoRequest){
+        produtoValidacaoService.validar(pedidoRequest.itensPedido());
+        participanteValidacaoService.validar(pedidoRequest.idParticipante());
     }
 }

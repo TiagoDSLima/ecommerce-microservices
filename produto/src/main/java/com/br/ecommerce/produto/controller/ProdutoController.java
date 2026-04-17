@@ -35,7 +35,12 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.OK).body(produtoService.buscaProduto(idProduto));
     }
 
-    @GetMapping(value = "/buscaTodosComEstoque")
+    @GetMapping("/buscaIds")
+    public ResponseEntity<List<ProdutoResponse>> buscarPorIds(@RequestParam List<Long> ids) {
+        return ResponseEntity.status(HttpStatus.OK).body(produtoService.buscaProdutosPorIds(ids));
+}
+
+        @GetMapping(value = "/buscaTodosComEstoque")
     public ResponseEntity<List<ProdutoResponse>> buscaTodosComEstoque(){
         return ResponseEntity.status(HttpStatus.OK).body(produtoService.buscaTodosComEstoque());
     }

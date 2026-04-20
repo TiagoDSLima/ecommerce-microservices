@@ -2,6 +2,7 @@ package com.br.ecommerce.produto.exception;
 
 
 import com.ecommerce.pedido.dto.ErrorResponse;
+import com.ecommerce.pedido.exception.exceptions.EstoqueInsuficienteException;
 import com.ecommerce.pedido.exception.exceptions.ProdutoNaoEncontradoException;
 import com.ecommerce.pedido.exception.exceptions.VariacaoProdutoNaoEncontradaException;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(VariacaoProdutoNaoEncontradaException.class)
     public ResponseEntity<ErrorResponse> handleVariacaoProdutoNaoEncontradaException(VariacaoProdutoNaoEncontradaException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(
+                        ex.getCampo(),
+                        ex.getMensagem(),
+                        LocalDateTime.now()
+                ));
+    }
+
+    @ExceptionHandler(EstoqueInsuficienteException.class)
+    public ResponseEntity<ErrorResponse> handleEstoqueInsuficienteException(EstoqueInsuficienteException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(

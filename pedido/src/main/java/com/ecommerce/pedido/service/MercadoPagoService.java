@@ -1,5 +1,6 @@
 package com.ecommerce.pedido.service;
 
+import com.ecommerce.pedido.client.LojaClient;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.client.payment.PaymentCreateRequest;
@@ -15,6 +16,7 @@ public class MercadoPagoService {
 
     private final PaymentClient paymentClient;
     private final PagamentoService pagamentoService;
+    private final LojaClient lojaClient;
 
     public Payment criarPagamento(PaymentCreateRequest request) {
 
@@ -51,7 +53,6 @@ public class MercadoPagoService {
 
 
     private String getAcessToken(){
-        //colocar para chaamr o microsserviço de loja para buscar token de acesso.
-        return "";
+        return lojaClient.buscaToken().token();
     }
 }

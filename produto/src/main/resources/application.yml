@@ -23,3 +23,11 @@ minio:
   access-key: minioadmin
   secret-key: minioadmin
   bucket-name: ecommerce.produtos
+
+ecommerce:
+  config:
+    kafka:
+      server-url: 'http://localhost:29092'
+      group-id: 'ecommerce-produto'
+      topics:
+        produtos-vendidos: 'produtos-vendidos'

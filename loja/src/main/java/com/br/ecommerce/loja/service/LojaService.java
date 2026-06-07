@@ -3,6 +3,7 @@ package com.br.ecommerce.loja.service;
 import com.br.ecommerce.loja.dto.BucketFile;
 import com.br.ecommerce.loja.dto.LojaRequest;
 import com.br.ecommerce.loja.dto.LojaResponse;
+import com.br.ecommerce.loja.dto.MercadoPagoTokenResponse;
 import com.br.ecommerce.loja.exception.exception.CorInvalidaException;
 import com.br.ecommerce.loja.exception.exception.LogoInvalidaException;
 import com.br.ecommerce.loja.model.Loja;
@@ -18,6 +19,7 @@ import java.util.regex.Pattern;
 public class LojaService {
 
     private static final String ID_DEFAULT = "default-config";
+    private static final String COR_PADRAO = "#FFFFFF";
     private static final Pattern HEX_COLOR_PATTERN = Pattern.compile("^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$");
 
     private final LojaRepository lojaRepository;
@@ -37,7 +39,8 @@ public class LojaService {
             throw new LogoInvalidaException("logo", "Arquivo da logo inválido!");
         }
 
-        Loja loja = new Loja(ID_DEFAULT, lojaRequest.corPrimaria());
+        Loja loja = carregaConfig();
+        loja.setCorPrimaria(lojaRequest.corPrimaria());
         lojaRepository.save(loja);
 
         return new LojaResponse(loja.getCorPrimaria(), bucketService.getUrl(ID_DEFAULT));
@@ -46,6 +49,21 @@ public class LojaService {
     public LojaResponse buscaConfig(){
         Loja loja = lojaRepository.findByid(ID_DEFAULT);
         return new LojaResponse(loja.getCorPrimaria(), bucketService.getUrl(ID_DEFAULT));
+    }
+
+    public void salvaToken(String token){
+        Loja loja = carregaConfig();
+        loja.setMercadoPagoToken(token);
+        lojaRepository.save(loja);
+    }
+
+    public MercadoPagoTokenResponse buscaToken(){
+        return new MercadoPagoTokenResponse(carregaConfig().getMercadoPagoToken());
+    }
+
+    private Loja carregaConfig(){
+        Loja loja = lojaRepository.findByid(ID_DEFAULT);
+        return loja != null ? loja : new Loja(ID_DEFAULT, COR_PADRAO, null);
     }
 
     private boolean verificaSeArquivoEImagem(MultipartFile arquivo){

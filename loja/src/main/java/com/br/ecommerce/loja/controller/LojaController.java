@@ -2,6 +2,8 @@ package com.br.ecommerce.loja.controller;
 
 import com.br.ecommerce.loja.dto.LojaRequest;
 import com.br.ecommerce.loja.dto.LojaResponse;
+import com.br.ecommerce.loja.dto.MercadoPagoTokenRequest;
+import com.br.ecommerce.loja.dto.MercadoPagoTokenResponse;
 import com.br.ecommerce.loja.service.LojaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -25,6 +27,17 @@ public class LojaController {
     public ResponseEntity<LojaResponse> alteraConfig(@ModelAttribute LojaRequest lojaRequest){
         LojaResponse lojaResponse = lojaService.alteraPersonalizacao(lojaRequest);
         return ResponseEntity.ok(lojaResponse);
+    }
+
+    @GetMapping("/mercadopago-token")
+    public ResponseEntity<MercadoPagoTokenResponse> buscaToken(){
+        return ResponseEntity.ok(lojaService.buscaToken());
+    }
+
+    @PutMapping("/mercadopago-token")
+    public ResponseEntity<Void> salvaToken(@RequestBody MercadoPagoTokenRequest request){
+        lojaService.salvaToken(request.token());
+        return ResponseEntity.noContent().build();
     }
 
 }

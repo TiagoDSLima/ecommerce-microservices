@@ -58,7 +58,11 @@ CREATE DATABASE ecommerceloja;
 
 CREATE TABLE loja(
     id VARCHAR(15) NOT NULL PRIMARY KEY,
-    cor_primaria VARCHAR(20) NOT NULL
+    cor_primaria VARCHAR(20) NOT NULL,
+    mercado_pago_token VARCHAR(255)
 );
+
+-- A loja possui apenas uma linha (configuração única)
+INSERT INTO loja (id, cor_primaria) VALUES ('default-config', '#FFFFFF');
 
 ----------------------

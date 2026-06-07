@@ -16,3 +16,5 @@ ecommerce:
         url: 'http://localhost:8083/produto'
       participante:
         url: 'http://localhost:8082/participante'
+      loja:
+        url: 'http://localhost:8084/loja'

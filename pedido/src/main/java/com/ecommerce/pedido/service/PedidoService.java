@@ -3,9 +3,11 @@ package com.ecommerce.pedido.service;
 import com.ecommerce.pedido.dto.*;
 import com.ecommerce.pedido.enums.StatusPagamento;
 import com.ecommerce.pedido.mapper.PedidoMapper;
+import com.ecommerce.pedido.model.ItemPedido;
 import com.ecommerce.pedido.model.Pedido;
 import com.ecommerce.pedido.publisher.ProdutoPublisher;
 import com.ecommerce.pedido.publisher.representation.ProdutoRepresentation;
+import com.ecommerce.pedido.repository.ItemPedidoRepository;
 import com.ecommerce.pedido.repository.PedidoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class PedidoService {
     private final ProdutoPublisher produtoPublisher;
     private final ProdutoValidacaoService produtoValidacaoService;
     private final ParticipanteValidacaoService participanteValidacaoService;
+    private final ItemPedidoRepository itemPedidoRepository;
 
     public PedidoCriadoResponse criaPedido(PedidoRequest pedidoRequest){
 
@@ -51,8 +54,15 @@ public class PedidoService {
                 pagamentoResponse.qrCodePix(), pagamentoResponse.qrCodeBase64Pix());
     }
 
-    private void publicaProdutosVendidos(List<ItemPedidoRequest> itemPedidos){
-        List<ProdutoRepresentation> produtos = itemPedidos.stream().map(itemPedido -> new ProdutoRepresentation(itemPedido.idProduto(), itemPedido.idProdutoVariacao(), itemPedido.quantidade())).toList();
+    public void publicaProdutosVendidos(List<ItemPedidoRequest> itensPedido){
+        List<ProdutoRepresentation> produtos = itensPedido.stream().map(itemPedido -> new ProdutoRepresentation(itemPedido.idProduto(), itemPedido.idProdutoVariacao(), itemPedido.quantidade())).toList();
+        produtoPublisher.publicar(produtos);
+    }
+
+    public void publicaProdutosVendidos(Long idPedido){
+        List<ItemPedido> itensPedido = itemPedidoRepository.findByPedido_Id(idPedido);
+
+        List<ProdutoRepresentation> produtos = itensPedido.stream().map(itemPedido -> new ProdutoRepresentation(itemPedido.getIdProduto(), itemPedido.getIdProdutoVariacao(), itemPedido.getQuantidade())).toList();
         produtoPublisher.publicar(produtos);
     }
 

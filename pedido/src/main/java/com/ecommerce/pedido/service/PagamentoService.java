@@ -4,12 +4,14 @@ import com.ecommerce.pedido.dto.DadosPagamentoDto;
 import com.ecommerce.pedido.dto.PagamentoResponse;
 import com.ecommerce.pedido.enums.StatusPagamento;
 import com.ecommerce.pedido.model.PagamentoPedido;
+import com.ecommerce.pedido.model.Pedido;
 import com.ecommerce.pedido.repository.PagamentoPedidoRepository;
 import com.ecommerce.pedido.strategy.pagamento.factory.PagamentoStrategyFactory;
 import com.ecommerce.pedido.strategy.pagamento.strategy.PagamentoStrategy;
 import com.mercadopago.client.payment.PaymentCreateRequest;
 import com.mercadopago.resources.payment.Payment;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,11 @@ import org.springframework.stereotype.Service;
 public class PagamentoService {
 
     private final PagamentoStrategyFactory factory;
+    @Lazy
     private final MercadoPagoService mercadoPagoService;
     private final PagamentoPedidoRepository pagamentoPedidoRepository;
+    @Lazy
+    private final PedidoService pedidoService;
 
     public PagamentoResponse geraPagamento(DadosPagamentoDto dadosPagamento){
 
@@ -41,7 +46,10 @@ public class PagamentoService {
                 .findByMercadoPagoId(payment.getId())
                 .orElseThrow();
 
-        //publicar produtos vendidos
+        if(!StatusPagamento.APROVADO.equals(pagamento.getStatusPagamento())
+            && StatusPagamento.APROVADO.equals(retornaStatus(payment.getStatus()))) {
+            pedidoService.publicaProdutosVendidos(pagamento.getPedido().getId());
+        }
         pagamento.setStatusPagamento(retornaStatus(payment.getStatus()));
         pagamento.setObservacaoStatus(payment.getStatusDetail());
         pagamentoPedidoRepository.save(pagamento);

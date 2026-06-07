@@ -4,6 +4,7 @@ import com.br.ecommerce.produto.dto.BucketFile;
 import com.br.ecommerce.produto.dto.ProdutoRequest;
 import com.br.ecommerce.produto.dto.ProdutoResponse;
 import com.br.ecommerce.produto.dto.ProdutoVariacaoDto;
+import com.br.ecommerce.produto.dto.ProdutoVendidoRepresentation;
 import com.br.ecommerce.produto.exception.exceptions.EstoqueInvalidoException;
 import com.br.ecommerce.produto.exception.exceptions.FalhaAoSalvarImagemException;
 import com.br.ecommerce.produto.exception.exceptions.ProdutoNaoEcontradoException;
@@ -15,6 +16,7 @@ import com.br.ecommerce.produto.model.ProdutoVariacao;
 import com.br.ecommerce.produto.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProdutoService {
@@ -127,6 +130,42 @@ public class ProdutoService {
                 .stream()
                 .map(produtoMapper::map)
                 .toList();
+    }
+
+    @Transactional
+    public void abaterEstoque(List<ProdutoVendidoRepresentation> produtosVendidos){
+        produtosVendidos.forEach(this::abaterEstoqueItem);
+    }
+
+    private void abaterEstoqueItem(ProdutoVendidoRepresentation item){
+        Produto produto = produtoRepository.findById(item.idProduto()).orElse(null);
+        if(produto == null){
+            log.warn("Produto {} não encontrado para baixa de estoque. Item ignorado.", item.idProduto());
+            return;
+        }
+
+        produto.setQuantidade(subtraiEstoque(produto.getQuantidade(), item.quantidade()));
+
+        if(item.idProdutoVariacao() != null){
+            abaterEstoqueVariacao(produto, item);
+        }
+
+        produtoRepository.save(produto);
+        log.info("Estoque abatido para o produto {} (variação {}): -{} unidade(s)", item.idProduto(), item.idProdutoVariacao(), item.quantidade());
+    }
+
+    private void abaterEstoqueVariacao(Produto produto, ProdutoVendidoRepresentation item){
+        produto.getVariacoes().stream()
+                .filter(variacao -> variacao.getId().equals(item.idProdutoVariacao()))
+                .findFirst()
+                .ifPresentOrElse(
+                        variacao -> variacao.setQuantidade(subtraiEstoque(variacao.getQuantidade(), item.quantidade())),
+                        () -> log.warn("Variação {} do produto {} não encontrada para baixa de estoque.", item.idProdutoVariacao(), item.idProduto())
+                );
+    }
+
+    private int subtraiEstoque(int estoqueAtual, int quantidadeVendida){
+        return Math.max(0, estoqueAtual - quantidadeVendida);
     }
 
     private boolean verificaProdutoUtilizado(Long id){

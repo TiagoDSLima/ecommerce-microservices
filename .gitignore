@@ -1,0 +1,6 @@
+# Dados dos containers
+servicos/database/data/
+servicos/bucket/docs/
+
+# IDE
+.idea/

@@ -24,4 +24,5 @@ minio:
   secret-key: minioadmin
   bucket-name: ecommerce.loja
 
-
+auth:
+  secret-key: ${JWT_SECRET:dev-secret-key-12345678901234567890}

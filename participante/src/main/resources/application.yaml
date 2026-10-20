@@ -26,4 +26,5 @@ ecommerce:
       topics:
         usuarios-criados: 'usuarios-criados'
 
-
+auth:
+  secret-key: ${JWT_SECRET:dev-secret-key-12345678901234567890}

@@ -18,3 +18,11 @@ ecommerce:
         url: 'http://localhost:8082/participante'
       loja:
         url: 'http://localhost:8084/loja'
+      auth:
+        url: 'http://localhost:8081/auth'
+    service-client:
+      id: 'pedido'
+      secret: ${PEDIDO_CLIENT_SECRET:dev-pedido-secret}
+
+auth:
+  secret-key: ${JWT_SECRET:dev-secret-key-12345678901234567890}

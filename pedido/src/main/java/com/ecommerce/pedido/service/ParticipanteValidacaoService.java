@@ -12,12 +12,14 @@ public class ParticipanteValidacaoService {
 
     private final ParticipanteClient participanteClient;
 
-    public void validar(Long idParticipante){
+    public Long buscaIdParticipante(Long idUsuario){
+        ParticipanteRepresentation participante;
         try {
-            ParticipanteRepresentation participante = participanteClient.buscaParticipantePorId(idParticipante);
-            if(participante == null) throw new ParticipanteNaoEncontradoException("idParticipante", String.format("Participante %d não encontrado!", idParticipante));
+            participante = participanteClient.buscaParticipantePorIdUsuario(idUsuario);
         } catch (Exception exception) {
-            throw new ParticipanteNaoEncontradoException("idParticipante", String.format("Participante %d não encontrado!", idParticipante));
+            participante = null;
         }
+        if(participante == null) throw new ParticipanteNaoEncontradoException("idUsuario", String.format("Participante do usuário %d não encontrado!", idUsuario));
+        return participante.id();
     }
 }

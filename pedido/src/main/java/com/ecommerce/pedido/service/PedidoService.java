@@ -25,10 +25,11 @@ public class PedidoService {
     private final ParticipanteValidacaoService participanteValidacaoService;
     private final ItemPedidoRepository itemPedidoRepository;
 
-    public PedidoCriadoResponse criaPedido(PedidoRequest pedidoRequest){
+    public PedidoCriadoResponse criaPedido(PedidoRequest pedidoRequest, Long idUsuario){
 
-        validacoes(pedidoRequest);
+        Long idParticipante = validacoes(pedidoRequest, idUsuario);
         Pedido pedido = pedidoMapper.map(pedidoRequest);
+        pedido.setIdParticipante(idParticipante);
         pedidoRepository.save(pedido);
 
         DadosPagamentoDto dadosPagamento = new DadosPagamentoDto(
@@ -66,8 +67,8 @@ public class PedidoService {
         produtoPublisher.publicar(produtos);
     }
 
-    private void validacoes(PedidoRequest pedidoRequest){
+    private Long validacoes(PedidoRequest pedidoRequest, Long idUsuario){
         produtoValidacaoService.validar(pedidoRequest.itensPedido());
-        participanteValidacaoService.validar(pedidoRequest.idParticipante());
+        return participanteValidacaoService.buscaIdParticipante(idUsuario);
     }
 }

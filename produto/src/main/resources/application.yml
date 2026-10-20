@@ -31,3 +31,6 @@ ecommerce:
       group-id: 'ecommerce-produto'
       topics:
         produtos-vendidos: 'produtos-vendidos'
+
+auth:
+  secret-key: ${JWT_SECRET:dev-secret-key-12345678901234567890}

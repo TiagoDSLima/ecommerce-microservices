@@ -20,6 +20,8 @@ spring:
 
 auth:
   secret-key: ${JWT_SECRET:dev-secret-key-12345678901234567890}
+  service-clients:
+    pedido: ${PEDIDO_CLIENT_SECRET:dev-pedido-secret}
 
 ecommerce:
   config:

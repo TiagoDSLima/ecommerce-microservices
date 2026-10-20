@@ -26,6 +26,9 @@ public class GatewayConfig {
                 .route("pedido-service", r -> r
                         .path("/pedido/**")
                         .uri("http://localhost:8085"))
+                .route("pedido-webhook", r -> r
+                        .path("/webhook/**")
+                        .uri("http://localhost:8085"))
                 .build();
     }
 }

@@ -32,7 +32,7 @@ public class AuthService {
             throw new CredenciaisInvalidasException();
         }
 
-        String token = jwtService.generateToken(user.getEmail(), user.getRole().name());
+        String token = jwtService.generateToken(user);
 
         return new LoginResponse(
                 user.getId(),
@@ -56,7 +56,7 @@ public class AuthService {
         repository.save(user);
         usuarioPublisher.publicar(new ParticipanteRepresentation(request.nome(), request.cpf(), request.dataNascimento(), user.getId()));
 
-        String token = jwtService.generateToken(user.getEmail(), user.getRole().name());
+        String token = jwtService.generateToken(user);
 
         return new LoginResponse(
                 user.getId(),

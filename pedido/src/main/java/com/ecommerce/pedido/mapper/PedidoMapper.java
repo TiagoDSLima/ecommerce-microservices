@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 public interface PedidoMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "idParticipante", ignore = true)
     @Mapping(target = "valorTotal", ignore = true)
     @Mapping(target = "itensPedido", source = "itensPedido")
     @Mapping(target = "enderecoPedido", source = "endereco")

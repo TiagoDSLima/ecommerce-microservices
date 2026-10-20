@@ -3,7 +3,10 @@ package com.br.ecommerce.auth.controller;
 import com.br.ecommerce.auth.dto.LoginRequest;
 import com.br.ecommerce.auth.dto.LoginResponse;
 import com.br.ecommerce.auth.dto.RegisterRequest;
+import com.br.ecommerce.auth.dto.ServiceTokenRequest;
+import com.br.ecommerce.auth.dto.ServiceTokenResponse;
 import com.br.ecommerce.auth.service.AuthService;
+import com.br.ecommerce.auth.service.ServiceTokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService service;
+    private final ServiceTokenService serviceTokenService;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
@@ -27,5 +31,10 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<LoginResponse> register(@RequestBody @Valid RegisterRequest request) {
         return ResponseEntity.ok(service.register(request));
+    }
+
+    @PostMapping("/token/servico")
+    public ResponseEntity<ServiceTokenResponse> tokenServico(@RequestBody @Valid ServiceTokenRequest request) {
+        return ResponseEntity.ok(serviceTokenService.gerarToken(request));
     }
 }

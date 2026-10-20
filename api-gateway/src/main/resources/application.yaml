@@ -4,3 +4,6 @@ server:
 spring:
   application:
     name: api-gateway
+
+auth:
+  secret-key: ${JWT_SECRET:dev-secret-key-12345678901234567890}

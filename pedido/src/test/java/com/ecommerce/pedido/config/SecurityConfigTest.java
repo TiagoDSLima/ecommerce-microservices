@@ -49,7 +49,7 @@ class SecurityConfigTest {
 
     @Test
     void criarPedidoUsaOUsuarioDoToken() throws Exception {
-        mockMvc.perform(post("/pedido").contentType(MediaType.APPLICATION_JSON).content("{\"idParticipante\": 999}")
+        mockMvc.perform(post("/pedido").contentType(MediaType.APPLICATION_JSON).content("{}")
                         .with(jwt().jwt(j -> j.subject("7")).authorities(new SimpleGrantedAuthority("ROLE_USER"))))
                 .andExpect(status().isCreated());
 

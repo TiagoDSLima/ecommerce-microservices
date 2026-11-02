@@ -129,6 +129,7 @@ public class ProdutoService {
         return produtosComEstoquePositivo
                 .stream()
                 .map(produtoMapper::map)
+                .map(this::somenteVariacoesComEstoque)
                 .toList();
     }
 
@@ -162,6 +163,17 @@ public class ProdutoService {
                         variacao -> variacao.setQuantidade(subtraiEstoque(variacao.getQuantidade(), item.quantidade())),
                         () -> log.warn("Variação {} do produto {} não encontrada para baixa de estoque.", item.idProdutoVariacao(), item.idProduto())
                 );
+    }
+
+    private ProdutoResponse somenteVariacoesComEstoque(ProdutoResponse produto){
+        if(produto.variacoes() == null) return produto;
+
+        List<ProdutoVariacaoDto> variacoesComEstoque = produto.variacoes().stream()
+                .filter(variacao -> variacao.quantidade() != null && variacao.quantidade() > 0)
+                .toList();
+
+        return new ProdutoResponse(produto.id(), produto.descricao(), produto.urlImagem(), produto.valorUnitario(),
+                produto.quantidade(), variacoesComEstoque);
     }
 
     private int subtraiEstoque(int estoqueAtual, int quantidadeVendida){

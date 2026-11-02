@@ -187,6 +187,9 @@ public class ProdutoService {
     }
 
     private void verificaEstoqueProdutoXVariacao(ProdutoRequest produtoRequest){
+        // Produto sem variações (ex.: caneca) não tem o que comparar
+        if(produtoRequest.variacoes() == null || produtoRequest.variacoes().isEmpty()) return;
+
         Integer qtdTotalVariacao = produtoRequest.variacoes().stream()
                 .mapToInt(ProdutoVariacaoDto::quantidade)
                 .sum();

@@ -5,6 +5,7 @@ import com.ecommerce.pedido.client.representation.ProdutoRepresentation;
 import com.ecommerce.pedido.client.representation.ProdutoVariacaoRepresentation;
 import com.ecommerce.pedido.dto.ItemPedidoRequest;
 import com.ecommerce.pedido.exception.exceptions.EstoqueInsuficienteException;
+import com.ecommerce.pedido.exception.exceptions.ItemPedidoInvalidoException;
 import com.ecommerce.pedido.exception.exceptions.ProdutoNaoEncontradoException;
 import com.ecommerce.pedido.exception.exceptions.VariacaoProdutoNaoEncontradaException;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,16 @@ public class ProdutoValidacaoService {
 
     private final ProdutoClient produtoClient;
 
-    public void validar(List<ItemPedidoRequest> itens) {
+    /**
+     * Valida os itens e devolve os produtos do catálogo indexados por id,
+     * para que o pedido use o preço do catálogo e não o enviado pelo cliente.
+     */
+    public Map<Long, ProdutoRepresentation> validar(List<ItemPedidoRequest> itens) {
+        if (itens == null || itens.isEmpty()) {
+            throw new ItemPedidoInvalidoException("itensPedido", "O pedido deve ter ao menos um item");
+        }
+        itens.forEach(this::verificarQuantidade);
+
         Map<Long, ProdutoRepresentation> produtos = buscarProdutos(itens);
 
         itens.forEach(item -> {
@@ -33,6 +43,17 @@ public class ProdutoValidacaoService {
                 verificarEstoqueProduto(item.quantidade(), produto);
             }
         });
+
+        return produtos;
+    }
+
+    private void verificarQuantidade(ItemPedidoRequest item) {
+        if (item.idProduto() == null) {
+            throw new ItemPedidoInvalidoException("idProduto", "Todo item do pedido deve informar o produto");
+        }
+        if (item.quantidade() == null || item.quantidade() <= 0) {
+            throw new ItemPedidoInvalidoException("quantidade", String.format("Quantidade inválida para o produto %s", item.idProduto().toString()));
+        }
     }
 
     private Map<Long, ProdutoRepresentation> buscarProdutos(List<ItemPedidoRequest> itens) {

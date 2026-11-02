@@ -27,7 +27,9 @@ public class SecurityConfig {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/auth/token/servico", "/loja/mercadopago-token").denyAll()
+                        .pathMatchers("/auth/token/servico").denyAll()
+                        // Leitura do token do Mercado Pago é só serviço-a-serviço; o PUT (ADMIN) passa e a Loja valida a role
+                        .pathMatchers(HttpMethod.GET, "/loja/mercadopago-token").denyAll()
                         .pathMatchers(HttpMethod.POST, "/auth/login", "/auth/register").permitAll()
                         .pathMatchers(HttpMethod.GET, "/produto/**", "/loja").permitAll()
                         .pathMatchers("/webhook/**").permitAll()

@@ -46,5 +46,10 @@ public interface PedidoMapper {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         pedido.setValorTotal(total);
+
+        // O valor cobrado é sempre o total calculado, nunca o "valorAPagar" enviado pelo cliente
+        if (pedido.getPagamentoPedido() != null) {
+            pedido.getPagamentoPedido().setValorPagamento(total);
+        }
     }
 }

@@ -3,60 +3,99 @@ package com.ecommerce.pedido.service;
 import com.ecommerce.pedido.dto.DadosPagamentoDto;
 import com.ecommerce.pedido.dto.PagamentoResponse;
 import com.ecommerce.pedido.enums.StatusPagamento;
+import com.ecommerce.pedido.exception.exceptions.PagamentoException;
 import com.ecommerce.pedido.model.PagamentoPedido;
 import com.ecommerce.pedido.model.Pedido;
+import com.ecommerce.pedido.publisher.ProdutoPublisher;
+import com.ecommerce.pedido.publisher.representation.ProdutoRepresentation;
 import com.ecommerce.pedido.repository.PagamentoPedidoRepository;
 import com.ecommerce.pedido.strategy.pagamento.factory.PagamentoStrategyFactory;
 import com.ecommerce.pedido.strategy.pagamento.strategy.PagamentoStrategy;
 import com.mercadopago.client.payment.PaymentCreateRequest;
 import com.mercadopago.resources.payment.Payment;
+import com.mercadopago.resources.payment.PaymentTransactionData;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PagamentoService {
 
     private final PagamentoStrategyFactory factory;
-    @Lazy
     private final MercadoPagoService mercadoPagoService;
     private final PagamentoPedidoRepository pagamentoPedidoRepository;
-    @Lazy
-    private final PedidoService pedidoService;
+    private final ProdutoPublisher produtoPublisher;
 
+    @Transactional
     public PagamentoResponse geraPagamento(DadosPagamentoDto dadosPagamento){
+
+        PagamentoPedido pagamentoPedido = pagamentoPedidoRepository.findByPedido_Id(dadosPagamento.pedidoId());
+        if (pagamentoPedido == null) {
+            throw new PagamentoException("pagamento", String.format("Pagamento do pedido %d não encontrado", dadosPagamento.pedidoId()));
+        }
 
         PagamentoStrategy strategy = factory.getStrategy(dadosPagamento.tipo());
         PaymentCreateRequest request = strategy.criar(dadosPagamento);
 
         Payment payment = mercadoPagoService.criarPagamento(request);
-        PagamentoPedido pagamentoPedido = pagamentoPedidoRepository.findByPedido_Id(dadosPagamento.pedidoId());
-        PagamentoResponse response = montaRetorno(payment, dadosPagamento);
-        pagamentoPedido.setStatusPagamento(response.statusPagamento());
-        pagamentoPedido.setMercadoPagoId(response.mercadoPagoId());
-        pagamentoPedido.setObservacaoStatus(response.observacaoStatus());
+
+        pagamentoPedido.setMercadoPagoId(payment.getId());
+        aplicaStatus(pagamentoPedido, payment);
         pagamentoPedidoRepository.save(pagamentoPedido);
 
-        return response;
+        return montaRetorno(payment, dadosPagamento);
     }
 
-    public void atualizarPagamento(Payment payment){
-        PagamentoPedido pagamento = pagamentoPedidoRepository
-                .findByMercadoPagoId(payment.getId())
-                .orElseThrow();
+    @Transactional
+    public void processarNotificacao(Long paymentId){
+        Payment payment = mercadoPagoService.buscarPagamento(paymentId);
 
-        if(!StatusPagamento.APROVADO.equals(pagamento.getStatusPagamento())
-            && StatusPagamento.APROVADO.equals(retornaStatus(payment.getStatus()))) {
-            pedidoService.publicaProdutosVendidos(pagamento.getPedido().getId());
+        Optional<PagamentoPedido> pagamentoOpt = pagamentoPedidoRepository.findByMercadoPagoId(payment.getId());
+        if (pagamentoOpt.isEmpty() && payment.getExternalReference() != null) {
+            // A notificação pode chegar antes do mercadoPagoId ser gravado; o external_reference é o id do pedido
+            pagamentoOpt = Optional.ofNullable(pagamentoPedidoRepository.findByPedido_Id(Long.valueOf(payment.getExternalReference())));
         }
-        pagamento.setStatusPagamento(retornaStatus(payment.getStatus()));
-        pagamento.setObservacaoStatus(payment.getStatusDetail());
+
+        if (pagamentoOpt.isEmpty()) {
+            log.warn("Notificação do Mercado Pago ignorada: pagamento {} não pertence a nenhum pedido", paymentId);
+            return;
+        }
+
+        PagamentoPedido pagamento = pagamentoOpt.get();
+        pagamento.setMercadoPagoId(payment.getId());
+        aplicaStatus(pagamento, payment);
         pagamentoPedidoRepository.save(pagamento);
     }
 
+    private void aplicaStatus(PagamentoPedido pagamento, Payment payment){
+        StatusPagamento novoStatus = retornaStatus(payment.getStatus());
+
+        if(!StatusPagamento.APROVADO.equals(pagamento.getStatusPagamento())
+            && StatusPagamento.APROVADO.equals(novoStatus)) {
+            publicaProdutosVendidos(pagamento.getPedido());
+        }
+        pagamento.setStatusPagamento(novoStatus);
+        pagamento.setObservacaoStatus(payment.getStatusDetail());
+    }
+
+    private void publicaProdutosVendidos(Pedido pedido){
+        List<ProdutoRepresentation> produtos = pedido.getItensPedido().stream()
+                .map(itemPedido -> new ProdutoRepresentation(itemPedido.getIdProduto(), itemPedido.getIdProdutoVariacao(), itemPedido.getQuantidade()))
+                .toList();
+        produtoPublisher.publicar(produtos);
+    }
+
     private PagamentoResponse montaRetorno(Payment payment, DadosPagamentoDto dadosPagamento){
-        var transacao = payment.getPointOfInteraction().getTransactionData();
+        // point_of_interaction só vem preenchido no Pix; em cartão é nulo
+        PaymentTransactionData transacao = payment.getPointOfInteraction() != null
+                ? payment.getPointOfInteraction().getTransactionData()
+                : null;
 
         return new PagamentoResponse(
                 payment.getId(),
@@ -65,33 +104,22 @@ public class PagamentoService {
                 retornaStatus(payment.getStatus()),
                 payment.getStatusDetail(),
                 payment.getTransactionAmount(),
-                "pix".equals(payment.getPaymentMethodId()) ? transacao.getQrCode() : null,
-                "pix".equals(payment.getPaymentMethodId()) ? transacao.getQrCodeBase64() : null
+                transacao != null ? transacao.getQrCode() : null,
+                transacao != null ? transacao.getQrCodeBase64() : null
         );
     }
 
     private StatusPagamento retornaStatus(String statusMercadoPago){
-        switch (statusMercadoPago) {
-            case "approved" -> {
-                return StatusPagamento.APROVADO;
-            }
-            case "pending" -> {
-                return StatusPagamento.PENDENTE;
-            }
-            case "rejected" -> {
-                return StatusPagamento.PROCESSANDO;
-            }
-            case "cancelled" -> {
-                return StatusPagamento.CANCELADO;
-            }
-            case "refunded" -> {
-                return StatusPagamento.DEVOLVIDO;
-            }
-            case "charged_back" -> {
-                return StatusPagamento.CONTESTADO;
-            }
-        }
+        if (statusMercadoPago == null) return StatusPagamento.PENDENTE;
 
-        return StatusPagamento.PENDENTE;
+        return switch (statusMercadoPago) {
+            case "approved" -> StatusPagamento.APROVADO;
+            case "authorized", "in_process", "in_mediation" -> StatusPagamento.PROCESSANDO;
+            case "rejected" -> StatusPagamento.REJEITADO;
+            case "cancelled" -> StatusPagamento.CANCELADO;
+            case "refunded" -> StatusPagamento.DEVOLVIDO;
+            case "charged_back" -> StatusPagamento.CONTESTADO;
+            default -> StatusPagamento.PENDENTE;
+        };
     }
 }

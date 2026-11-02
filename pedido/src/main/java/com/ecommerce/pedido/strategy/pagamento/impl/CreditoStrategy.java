@@ -16,7 +16,7 @@ public class CreditoStrategy implements PagamentoStrategy {
                 .transactionAmount(dadosPagamento.valor())
                 .token(dadosPagamento.token())
                 .description("Pedido #" + dadosPagamento.pedidoId())
-                .installments(dadosPagamento.parcelas())
+                .installments(dadosPagamento.parcelas() != null ? dadosPagamento.parcelas() : 1)
                 .paymentMethodId(dadosPagamento.bandeira().name().toLowerCase())
                 .externalReference(String.valueOf(dadosPagamento.pedidoId()))
                 .payer(

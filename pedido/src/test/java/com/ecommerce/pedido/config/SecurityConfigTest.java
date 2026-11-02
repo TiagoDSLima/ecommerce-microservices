@@ -3,7 +3,7 @@ package com.ecommerce.pedido.config;
 import com.ecommerce.pedido.controller.MercadoPagoWebhookController;
 import com.ecommerce.pedido.controller.PedidoController;
 import com.ecommerce.pedido.dto.PedidoRequest;
-import com.ecommerce.pedido.service.MercadoPagoService;
+import com.ecommerce.pedido.service.PagamentoService;
 import com.ecommerce.pedido.service.PedidoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ class SecurityConfigTest {
     private PedidoService pedidoService;
 
     @MockitoBean
-    private MercadoPagoService mercadoPagoService;
+    private PagamentoService pagamentoService;
 
     @Test
     void criarPedidoSemTokenDeveRetornar401() throws Exception {

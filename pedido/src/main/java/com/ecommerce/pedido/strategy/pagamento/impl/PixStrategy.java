@@ -5,7 +5,9 @@ import com.ecommerce.pedido.strategy.pagamento.strategy.PagamentoStrategy;
 import com.mercadopago.client.common.IdentificationRequest;
 import com.mercadopago.client.payment.PaymentCreateRequest;
 import com.mercadopago.client.payment.PaymentPayerRequest;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PixStrategy implements PagamentoStrategy {
 
     @Override

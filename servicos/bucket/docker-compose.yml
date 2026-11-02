@@ -1,15 +1,14 @@
-version: '3.9'
-
 services:
   minio:
-    image: minio/minio:latest
+    # A imagem oficial minio/minio foi removida do Docker Hub; a bitnamilegacy é compatível com o SDK do MinIO
+    image: bitnamilegacy/minio:latest
     container_name: minio
     ports:
       - "9100:9000"
       - "9002:9001"
     volumes:
-      - ./docs:/data
+      - ./docs:/bitnami/minio/data
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
-    command: server /data --console-address ":9001"
+      MINIO_DEFAULT_BUCKETS: ecommerce.produtos,ecommerce.loja
